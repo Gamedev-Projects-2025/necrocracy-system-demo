@@ -156,6 +156,36 @@ public class DwellerManager : MonoBehaviour
         }
     }
 
+    public void opinon(GameObject dweller)
+    {
+        execution.GetComponent<TextMeshProUGUI>().text = dweller.GetComponent<DwellerLogic>().GetDweller().GetRelationship(playerDweller) >= 50 ? "They like you" : "The dislike you";
+    }
+
+    public void beFriend(GameObject friend)
+    {
+        friend.GetComponent<DwellerLogic>().GetDweller().friendly++;
+        friend.GetComponent<DwellerLogic>().GetDweller().UpdateRelationship(playerDweller, 10);
+
+        foreach (GameObject dwellerObject in dwellers)
+        {
+            if (dwellerObject == playerDweller || dwellerObject == friend || dwellerObject == null) continue;
+
+            Dweller dweller = dwellerObject.GetComponent<DwellerLogic>().GetDweller();
+
+            if (dweller != null)
+            {
+                if (dweller.GetRelationship(friend) < 50)
+                {
+                    dweller.UpdateRelationship(playerDweller, -10);
+                }
+                else
+                {
+                    dweller.UpdateRelationship(playerDweller, 10);
+                }
+            }
+        }
+    }
+
     public void rumor(GameObject target)
     {
         foreach (GameObject dwellerObject in dwellers)
